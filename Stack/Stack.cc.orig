@@ -1,0 +1,121 @@
+/****************************************************
+ * Mitchell Brandone
+ * 11-1-15
+ * Stack.cc
+ *
+ * A stack, using a generic linked list as a back end
+ ****************************************************/
+
+#include <iostream>
+#include "GenericList.cc"
+using namespace std;
+//Allows the stack to use multiple variable types
+template <class s_type>
+class Stack
+{
+	private:
+		List<s_type> list;
+
+	public:
+		//Basic constructor.
+		//List backend is already implemented, so there is nothing here
+		Stack<s_type>()
+		{
+		}
+		//Copy Constructor
+		//Utilizes Generic List implementation of constructors
+		//So we just tell it to copy the only private Stack variable
+		Stack(const Stack& s)
+		{
+			list = s.list;
+		}
+		//Equal operator overload
+		//Implemented for our List backend, so easy game easy life
+		void operator=(const Stack& s)
+		{
+			list = s.list;
+		}
+		//Pushes a data value onto the top of the stack
+		void Push(s_type data)
+		{
+			list.First();
+			list.InsertBefore(data);
+		}
+		//"Pops" the newest member of the stack off,
+		//returning the value stored, and removing it
+		//from the stack
+		s_type Pop()
+		{
+
+			s_type temp = Peek();
+			list.Remove();
+			return temp;
+		}
+		//Sneaks past you like a ninja
+		//and tells you what value is resting at the
+		//top of the stack, without disturbing
+		//its delicate slumber
+		s_type Peek()
+		{
+			list.First();
+			return list.GetValue();
+		}
+		//Returns the size of the stack
+		//(really the size of the list backend)
+		int Size()
+		{
+			return list.GetSize();
+		}
+		//Returns true if the stack is empty,
+		//false otherwise
+		bool IsEmpty()
+		{
+			return list.IsEmpty();
+		}
+		//Its almost like the "bool" tag at the 
+		//front tells you something, like that
+		//it will be true or false, based off whether
+		//or not the stack is full
+		bool IsFull()
+		{
+			return list.IsFull();
+		}
+		//Adds two stacks together,
+		//returning the second stack, appended
+		//to the end of the first stack
+		Stack operator+(const Stack& s)const
+		{
+			/*	Stack<s_type> ret = *this;
+				ret.list.Last();
+				ret.list=list+s.list;
+				return ret;
+			*/
+			Stack<s_type> ret;
+			ret.list = this->list + s.list;
+			return ret;
+
+		}
+		//True if the two stacks are equal at all
+		//locations and values, false otherwise
+		bool operator==(const Stack& s)const
+		{
+			return list == s.list;
+		}
+		//Same as above, but in reverse.  True if
+		//not the same, false if the same
+		bool operator!=(const Stack& s)const
+		{
+			return !(list == s.list);
+		}
+		//Friendly helper method that allows us to 
+		//print the values stored within stacks, because
+		//normally printing these lists doesnt work,
+		//so we give it some help
+		friend ostream& operator<<(ostream& out, const Stack& s)
+		{
+			out << s.list;
+			return out;
+		}
+
+
+};

@@ -1,0 +1,123 @@
+/****************************************************
+ * Mitchell Brandone
+ * 11-1-15
+ * Queue.cc
+ *
+ * A Queue, using a generic linked list as a back end
+ ****************************************************/
+
+#include <iostream>
+#include "GenericList.cc"
+using namespace std;
+
+//Allows the queue to use multiple variable types
+template <class q_type>
+class Queue
+{
+	private:
+		List<q_type> list;
+
+	public:
+		//Basic constructor.
+		//List backend is already implemented, so there is nothing here
+		Queue<q_type>()
+		{
+		}
+		//Copy Constructor
+		//Utilizes Generic List implementation of constructors
+		//So we just tell it to copy the only private Queue variable
+		Queue(const Queue& q)
+		{
+			list = q.list;
+		}
+		//Equal operator overload
+		//Implemented for our List backend, so easy game easy life
+		void operator=(const Queue& q)
+		{
+			list = q.list;
+		}
+		//Enqueues a value to the end of the queue
+		//Like a good british gentleman, it waits at the
+		//end until it reaches the fron of the line
+		//in order to be dequeued
+		void Enqueue(q_type data)
+		{
+			list.Last();
+			list.InsertAfter(data);
+		}
+		//Dequeues a value from the front of the queue
+		//Its like your dream come true when waiting
+		//at the DMV, you are finally next in line,
+		//and all your suffering may be worth it,
+		//until you realize you forgot your birth certificate
+		q_type Dequeue()
+		{
+			list.First();
+			q_type temp = list.GetValue();
+			list.Remove();
+			return temp;
+
+		}
+		//Sneaks past you like a ninja
+		//and tells you what value is resting at the
+		//top of the stack, without disturbing
+		//its delicate slumber
+		q_type Peek()
+		{
+			list.First();
+			return list.GetValue();
+		}
+		//Returns the size of the queue
+		//(really the size of the list backend)
+		int Size()
+		{
+			return list.GetSize();
+		}
+		//Returns true if the queue is empty,
+		//false otherwise
+		bool IsEmpty()
+		{
+			return list.IsEmpty();
+		}
+		//Its almost like the "bool" tag at the
+		//front tells you something, like that
+		//it will be true or false, based off whether
+		//or not the queue is full.  True if full btw
+		bool IsFull()
+		{
+			return list.IsFull();
+		}
+		//Adds two queues together,
+		//returning the second queue, appended
+		//to the end of the first queue
+		Queue operator+(const Queue& q)const
+		{
+			Queue<q_type> ret;
+			ret.list = this->list + q.list;
+			return ret;
+
+		}
+		//True if the two queues are equal at all
+		//locations and values, false otherwise
+		bool operator==(const Queue& q)const
+		{
+			return list == q.list;
+		}
+		//Same as above, but in reverse.  True if
+		//not the same, false if the same
+		bool operator!=(const Queue& q)const
+		{
+			return !(list == q.list);
+		}
+		//Friendly helper method that allows us to
+		//print the values stored within queues, because
+		//normally printing these lists doesnt work,
+		//so we give it some help
+		friend ostream& operator<<(ostream& out, const Queue& q)
+		{
+			out << q.list;
+			return out;
+		}
+
+
+};
